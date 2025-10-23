@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, ScrollView, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Text, Divider, Chip } from 'react-native-paper';
 import { getRecipeDetails } from '../services/recipeAPI';
 
 export default function RecipeDetailScreen({ route, navigation }) {
@@ -33,7 +34,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   if (loading) {
     return (
       <SafeAreaView style={styles.centered}>
-        <ActivityIndicator size="large" color="#2563eb" />
+        <ActivityIndicator size="large" animating={true} color="#2563eb" />
         <Text style={styles.loadingText}>Loading recipe...</Text>
       </SafeAreaView>
     );
@@ -42,7 +43,9 @@ export default function RecipeDetailScreen({ route, navigation }) {
   if (error || !id) {
     return (
       <SafeAreaView style={styles.centered}>
-        <Text style={styles.errorText}>{error || 'Invalid recipe'}</Text>
+        <Text variant="titleMedium" style={styles.errorText}>
+          {error || 'Invalid recipe'}
+        </Text>
       </SafeAreaView>
     );
   }
@@ -50,7 +53,9 @@ export default function RecipeDetailScreen({ route, navigation }) {
   if (!recipe) {
     return (
       <SafeAreaView style={styles.centered}>
-        <Text style={styles.errorText}>Recipe not found</Text>
+        <Text variant="titleMedium" style={styles.errorText}>
+          Recipe not found
+        </Text>
       </SafeAreaView>
     );
   }
@@ -61,33 +66,45 @@ export default function RecipeDetailScreen({ route, navigation }) {
         <Image source={{ uri: recipe.image }} style={styles.image} />
         
         <View style={styles.content}>
-          <Text style={styles.title}>{recipe.title}</Text>
+          <Text variant="headlineMedium" style={styles.title}>
+            {recipe.title}
+          </Text>
           
-          <View style={styles.meta}>
-            <Text style={styles.metaText}>
-              ⏱️ {recipe.readyInMinutes || 'N/A'} min
-            </Text>
-            <Text style={styles.metaText}>
-              🍽️ {recipe.servings || 'N/A'} servings
-            </Text>
+          <View style={styles.metaContainer}>
+            <Chip icon="clock-outline" style={styles.chip}>
+              {recipe.readyInMinutes || 'N/A'} min
+            </Chip>
+            <Chip icon="silverware-fork-knife" style={styles.chip}>
+              {recipe.servings || 'N/A'} servings
+            </Chip>
           </View>
 
+          <Divider style={styles.divider} />
+
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Ingredients</Text>
+            <Text variant="titleLarge" style={styles.sectionTitle}>
+              Ingredients
+            </Text>
             {recipe.extendedIngredients && recipe.extendedIngredients.length > 0 ? (
               recipe.extendedIngredients.map((ing, index) => (
-                <Text key={index} style={styles.ingredient}>
+                <Text key={index} variant="bodyMedium" style={styles.ingredient}>
                   • {ing.original}
                 </Text>
               ))
             ) : (
-              <Text style={styles.noData}>No ingredients available</Text>
+              <Text variant="bodyMedium" style={styles.noData}>
+                No ingredients available
+              </Text>
             )}
           </View>
 
+          <Divider style={styles.divider} />
+
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Instructions</Text>
-            <Text style={styles.instructions}>
+            <Text variant="titleLarge" style={styles.sectionTitle}>
+              Instructions
+            </Text>
+            <Text variant="bodyMedium" style={styles.instructions}>
               {recipe.instructions?.replace(/<[^>]*>/g, '') || 'No instructions available'}
             </Text>
           </View>
@@ -109,12 +126,10 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   loadingText: {
-    marginTop: 10,
-    fontSize: 16,
+    marginTop: 16,
     color: '#666',
   },
   errorText: {
-    fontSize: 16,
     color: '#d00',
     textAlign: 'center',
   },
@@ -126,39 +141,36 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    marginBottom: 16,
     fontWeight: 'bold',
-    marginBottom: 15,
   },
-  meta: {
+  metaContainer: {
     flexDirection: 'row',
-    gap: 15,
-    marginBottom: 20,
+    gap: 12,
+    marginBottom: 16,
   },
-  metaText: {
-    color: '#666',
-    fontSize: 16,
+  chip: {
+    backgroundColor: '#e3f2fd',
+  },
+  divider: {
+    marginVertical: 16,
   },
   section: {
-    marginBottom: 25,
+    marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 20,
+    marginBottom: 12,
     fontWeight: 'bold',
-    marginBottom: 10,
   },
   ingredient: {
-    fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 4,
     lineHeight: 24,
   },
   instructions: {
-    fontSize: 16,
     lineHeight: 24,
     color: '#333',
   },
   noData: {
-    fontSize: 14,
     color: '#999',
     fontStyle: 'italic',
   },

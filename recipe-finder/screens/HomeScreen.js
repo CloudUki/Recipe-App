@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, FlatList, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator, Text } from 'react-native-paper';
 import SearchBar from '../components/SearchBar';
 import RecipeCard from '../components/RecipeCard';
 import { searchRecipes } from '../services/recipeAPI';
@@ -28,12 +29,14 @@ export default function HomeScreen({ navigation }) {
       
       {loading ? (
         <View style={styles.centered}>
-          <ActivityIndicator size="large" color="#2563eb" />
+          <ActivityIndicator size="large" animating={true} color="#2563eb" />
           <Text style={styles.loadingText}>Searching...</Text>
         </View>
       ) : recipes.length === 0 ? (
         <View style={styles.centered}>
-          <Text style={styles.emptyText}>🔍 Search for recipes to get started!</Text>
+          <Text variant="titleMedium" style={styles.emptyText}>
+            🔍 Search for recipes to get started!
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -64,16 +67,15 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   loadingText: {
-    marginTop: 10,
+    marginTop: 16,
     color: '#666',
-    fontSize: 16,
   },
   emptyText: {
-    fontSize: 18,
     color: '#999',
     textAlign: 'center',
   },
   listContent: {
-    paddingTop: 16,
+    paddingTop: 8,
+    paddingBottom: 16,
   },
 });
