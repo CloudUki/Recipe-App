@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 
 export default function SearchBar({ onSearch }) {
   const [query, setQuery] = useState('');
@@ -12,49 +13,24 @@ export default function SearchBar({ onSearch }) {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
+      <Searchbar
         placeholder="Search for recipes..."
-        placeholderTextColor="#999"
-        value={query}
         onChangeText={setQuery}
+        value={query}
         onSubmitEditing={handleSearch}
-        returnKeyType="search"
+        onIconPress={handleSearch}
+        style={styles.searchbar}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSearch}>
-        <Text style={styles.buttonText}>Search</Text>
-      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     padding: 16,
     backgroundColor: '#fff',
   },
-  input: {
-    flex: 1,
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    color: '#000',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    marginRight: 8,
-  },
-  button: {
-    backgroundColor: '#2563eb',
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+  searchbar: {
+    elevation: 2,
   },
 });
